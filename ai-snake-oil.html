@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Snake Oil — Wonder Tools Book Group</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FFC72C;
+    --yellow-light: #FFD95A;
+    --yellow-pale: #FFF8E1;
+    --black: #0D0D0D;
+    --dark: #1A1A1A;
+    --dark-card: #222222;
+    --gray-800: #2D2D2D;
+    --gray-600: #6B6B6B;
+    --gray-400: #999;
+    --gray-200: #E0E0E0;
+    --white: #FAFAFA;
+    --off-white: #F5F5F0;
+    --red-soft: #FF6B6B;
+    --green-soft: #51CF66;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--off-white);
+    color: var(--black);
+    line-height: 1.72;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* === HERO === */
+  .hero {
+    background: var(--black);
+    color: var(--white);
+    padding: 56px 24px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--yellow);
+  }
+  .hero-badge {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--black);
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.8em, 6vw, 4.2em);
+    font-weight: 700;
+    color: var(--yellow);
+    line-height: 1.05;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+  }
+  .hero .subtitle {
+    font-size: 1.15em;
+    color: var(--gray-400);
+    font-style: italic;
+    margin-bottom: 8px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero .authors {
+    font-size: 1.05em;
+    color: var(--gray-200);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .hero .pub {
+    font-size: 0.85em;
+    color: var(--gray-600);
+  }
+  .hero .guest-badge {
+    display: inline-block;
+    margin-top: 20px;
+    background: rgba(255,199,44,0.12);
+    border: 1px solid rgba(255,199,44,0.3);
+    color: var(--yellow-light);
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 600;
+  }
+
+  /* === NAV === */
+  .nav {
+    background: var(--black);
+    border-bottom: 3px solid var(--yellow);
+    padding: 10px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .nav a {
+    display: inline-block;
+    color: var(--gray-400);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.5px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .nav a:hover {
+    color: var(--yellow);
+    background: rgba(255,199,44,0.1);
+  }
+
+  /* === CONTAINER === */
+  .container {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* === SECTION HEADERS === */
+  .section { margin-bottom: 52px; }
+  .section-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 6px;
+  }
+  .section h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.9em;
+    font-weight: 700;
+    color: var(--black);
+    line-height: 1.15;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 3px solid var(--yellow);
+  }
+
+  /* === LINK GRID === */
+  .link-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 12px;
+  }
+  .link-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: white;
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 16px 18px;
+    text-decoration: none;
+    color: var(--black);
+    transition: all 0.2s;
+  }
+  .link-card:hover {
+    border-color: var(--yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,199,44,0.2);
+  }
+  .link-card .icon { font-size: 22px; flex-shrink: 0; }
+  .link-card .label { font-weight: 700; font-size: 0.92em; }
+  .link-card .desc { font-size: 0.78em; color: var(--gray-600); margin-top: 1px; }
+
+  /* === CARDS === */
+  .card {
+    background: white;
+    border: 2px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15em;
+    font-weight: 700;
+    color: var(--black);
+    margin-bottom: 12px;
+  }
+  .card p { margin-bottom: 12px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* === SOURCE TAGS === */
+  .tag {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+  }
+  .tag-book { background: var(--black); color: var(--yellow); }
+  .tag-live { background: var(--yellow); color: var(--black); }
+  .tag-shortform { background: #FFF3CD; color: #856404; border: 1px solid #FFEEBA; }
+  .tag-review { background: #D4EDDA; color: #155724; }
+  .tag-author { background: #F8D7DA; color: #721C24; }
+
+  /* === CONCEPT PAIR === */
+  .concepts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 20px 0;
+  }
+  @media (max-width: 600px) { .concepts { grid-template-columns: 1fr; } }
+  .concept {
+    border-radius: 10px;
+    padding: 22px;
+    border: 2px solid;
+  }
+  .concept h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1em;
+    margin-bottom: 10px;
+  }
+  .concept-warn { background: #FFF5F5; border-color: #FEB2B2; }
+  .concept-warn h4 { color: #C53030; }
+  .concept-ok { background: #F0FFF4; border-color: #9AE6B4; }
+  .concept-ok h4 { color: #276749; }
+
+  /* === COLLAPSIBLE === */
+  details {
+    background: white;
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  details[open] { border-color: var(--yellow); }
+  details summary {
+    padding: 18px 22px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    color: var(--black);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.2s;
+  }
+  details summary:hover { background: var(--yellow-pale); }
+  details summary::before {
+    content: '▸';
+    font-size: 13px;
+    color: var(--yellow);
+    transition: transform 0.2s;
+    font-weight: 700;
+  }
+  details[open] summary::before { transform: rotate(90deg); }
+  details summary::-webkit-details-marker { display: none; }
+  .detail-body { padding: 0 22px 22px; }
+  .detail-body p { margin-bottom: 12px; }
+
+  /* === EXAMPLES === */
+  .example {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .example:last-child { border-bottom: none; }
+  .example strong { color: var(--black); }
+  .domain-pill {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--yellow);
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-right: 6px;
+  }
+
+  /* === REVIEWS === */
+  .review {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .review:last-child { border-bottom: none; }
+  .review .pub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.9em;
+    color: var(--black);
+  }
+  .review .text {
+    margin-top: 4px;
+    color: #444;
+  }
+
+  /* === HIGHLIGHT BOX === */
+  .highlight {
+    background: var(--yellow-pale);
+    border-left: 5px solid var(--yellow);
+    padding: 20px 24px;
+    border-radius: 0 10px 10px 0;
+    margin: 20px 0;
+    font-size: 1em;
+  }
+
+  /* === SPONSOR === */
+  .sponsor-card {
+    background: linear-gradient(135deg, #FFF9E6 0%, #FFF3CD 100%);
+    border: 2px solid var(--yellow);
+    border-radius: 12px;
+    padding: 28px;
+    margin: 32px 0;
+  }
+  .sponsor-card h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    color: #856404;
+    margin-bottom: 10px;
+  }
+  .sponsor-card a { color: #856404; font-weight: 700; }
+
+  /* === FOOTER === */
+  .footer {
+    background: var(--black);
+    color: var(--gray-400);
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 0.9em;
+  }
+  .footer a { color: var(--yellow); text-decoration: none; }
+  .footer .brand {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.15em;
+    color: var(--yellow);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Season 1: AI · Session 1</div>
+  <h1>AI Snake Oil</h1>
+  <div class="subtitle">What Artificial Intelligence Can Do, What It Can't, and How to Tell the Difference</div>
+  <div class="authors">Arvind Narayanan & Sayash Kapoor</div>
+  <div class="pub">Princeton University Press, 2024</div>
+  <div class="guest-badge">✦ Guest Author Q&A with Arvind Narayanan</div>
+</div>
+
+<div class="nav">
+  <a href="#recordings">Recordings</a>
+  <a href="#about">About the Book</a>
+  <a href="#discussion">Discussion Recap</a>
+  <a href="#examples">Key Examples</a>
+  <a href="#reviews">Reviews</a>
+  <a href="#next">What's Next</a>
+</div>
+
+<div class="container">
+
+  <!-- RECORDINGS -->
+  <div class="section" id="recordings">
+    <div class="section-label">Resources</div>
+    <h2>Session Recordings & Links</h2>
+    <div class="link-grid">
+      <a class="link-card" href="https://fathom.video/share/4A2vatsWV2E3nTncfcC1A6e_3T4Gmi9F" target="_blank">
+        <div class="icon">🎙️</div>
+        <div><div class="label">Fathom AI Recording</div><div class="desc">Full session with AI highlights</div></div>
+      </a>
+      <a class="link-card" href="https://www.dropbox.com/scl/fo/t6nqgktd5l4dguakt8wih/AGcIFCMJGvSm-hyhsTPlZ9g?rlkey=ojrv0qh4rdbxnjsw9lk9rwn7g&dl=0" target="_blank">
+        <div class="icon">☁️</div>
+        <div><div class="label">Zoom Recording Folder</div><div class="desc">Video, audio & chat</div></div>
+      </a>
+      <a class="link-card" href="https://www.dropbox.com/scl/fi/nrktl7cr0x5qry2ue04q8/Shortform-Summary-AI-Snake-Oil.pdf?rlkey=1aviw1wbz1ixgrhyhervl7zc8&dl=0" target="_blank">
+        <div class="icon">📄</div>
+        <div><div class="label">Shortform Summary</div><div class="desc">In-depth book guide (PDF)</div></div>
+      </a>
+      <a class="link-card" href="https://www.youtube.com/watch?v=rT2eE8Yoer4" target="_blank">
+        <div class="icon">▶️</div>
+        <div><div class="label">Princeton Author Video</div><div class="desc">Narayanan & Kapoor on the book</div></div>
+      </a>
+      <a class="link-card" href="https://jeremycaplan.github.io/wonder-tools-book-group/" target="_blank">
+        <div class="icon">📚</div>
+        <div><div class="label">Full 2026 Book List</div><div class="desc">All Season 1 books</div></div>
+      </a>
+      <a class="link-card" href="https://wondertools.substack.com" target="_blank">
+        <div class="icon">✉️</div>
+        <div><div class="label">Wonder Tools Newsletter</div><div class="desc">Return to the newsletter</div></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="section" id="about">
+    <div class="section-label">Overview</div>
+    <h2>About the Book</h2>
+
+    <div class="card">
+      <span class="tag tag-book">From the Book</span>
+      <h3>The Big Idea</h3>
+      <p>"AI snake oil" is AI that doesn't work as advertised — and probably can't. The book argues that the blanket term "AI" obscures the reality that very different technologies are lumped together. ChatGPT has almost nothing in common with the software banks use to evaluate loan applicants, but both get called "AI."</p>
+      <p>The authors draw a crucial distinction between <strong>predictive AI</strong> (systems making decisions about people — loans, parole, hiring, healthcare) and <strong>generative AI</strong> (systems like ChatGPT producing text, images, and code). The risks — and the potential — are very different.</p>
+    </div>
+
+    <div class="concepts">
+      <div class="concept concept-warn">
+        <h4>⚠️ Predictive AI — Where Snake Oil Thrives</h4>
+        <p style="font-size:0.93em;">Used in hiring, criminal justice, healthcare, insurance. The book argues this technology hasn't meaningfully improved in 50 years for predicting individual behavior.</p>
+      </div>
+      <div class="concept concept-ok">
+        <h4>✅ AI That Actually Works</h4>
+        <p style="font-size:0.93em;">Spell-check, autocomplete, spam filters, speech recognition, robot vacuums. Once these worked well, we stopped calling them "AI." Generative AI is genuinely promising when used wisely.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-author">About the Authors</span>
+      <h3>Arvind Narayanan & Sayash Kapoor</h3>
+      <p><strong>Arvind Narayanan</strong> is a professor of computer science at Princeton and director of its Center for Information Technology Policy. His research was among the first to show how machine learning reflects cultural stereotypes. He received the Presidential Early Career Award for Scientists and Engineers and previously co-authored <em>Bitcoin and Cryptocurrency Technologies</em> (Princeton, 2016).</p>
+      <p><strong>Sayash Kapoor</strong> is a PhD candidate at Princeton. Before academia, he worked as a software engineer at Facebook building AI for content moderation — he's seen these issues from the inside.</p>
+      <p>Together they were named to <strong>TIME's inaugural 100 Most Influential People in AI</strong>. They co-author the newsletter <a href="https://www.normaltech.ai/" target="_blank"><em>AI as Normal Technology</em></a> (formerly AI Snake Oil), read by ~50,000 researchers, policymakers, and journalists.</p>
+    </div>
+  </div>
+
+  <!-- DISCUSSION RECAP -->
+  <div class="section" id="discussion">
+    <div class="section-label">March 2026</div>
+    <h2>Live Discussion Recap</h2>
+
+    <div class="card">
+      <span class="tag tag-live">From the Live Session</span>
+      <h3>Guest Author Q&A with Arvind Narayanan</h3>
+      <p>Arvind joined for the opening 20 minutes before another commitment. Below are the key highlights from his remarks and the group conversation that followed.</p>
+    </div>
+
+    <details>
+      <summary>🔮 His New Project: "AI as Normal Technology"</summary>
+      <div class="detail-body">
+        <p>The book focused on present-day hype. His new project examines the next 20 years. He compares AI's long-run impact to <strong>general-purpose technologies like electricity, the internet, and the Industrial Revolution</strong> — transformative, but gradual rather than overnight.</p>
+        <p>A grounded, long-horizon view can reduce panic while still preparing early for real challenges.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>😱 "People Are Afraid of the Wrong Things"</summary>
+      <div class="detail-body">
+        <p>Arvind cited Bruce Schneier's principle: <em>If it's in the news, don't worry about it.</em> Rare, sensational risks get attention; common, large-scale harms get missed.</p>
+        <p><strong>Underestimated threat:</strong> Non-consensual deepfake nude images — a 2019 report found ~100,000 already created and traded, primarily targeting women and girls, occurring globally. Policymakers only recently began responding.</p>
+        <p><strong>Overestimated threat:</strong> AI-driven election interference. Analysis of 2024 elections across ~60 countries showed AI election interference did not emerge as a major factor.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>🏥 Healthcare AI: "These Models Are Not Getting Better"</summary>
+      <div class="detail-body">
+        <p>Arvind was blunt: predictive AI in healthcare has <strong>not meaningfully improved</strong>.</p>
+        <p><strong>UnitedHealthcare case:</strong> 90% of AI decisions found incorrect, yet employees were required to follow them or face firing.</p>
+        <p><strong>Key insight:</strong> Models can't meaningfully improve for individual outcomes because of inherent uncertainty. They also pick up sensitive patterns (race, gender) even when those fields aren't explicitly included, through proxies like residential location.</p>
+        <p>His prescription: <strong>Solutions are primarily non-technical</strong> — decide when not to use such tools, and when used, add procedural protections and genuine human oversight.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>🎓 AI in Education: The Calculator Analogy</summary>
+      <div class="detail-body">
+        <p>The comparison to calculators can sound flippant, but Arvind stands by it: education will be "okay" long-term, though the transition is "tumultuous" and "deeply confusing."</p>
+        <p>Each educator must determine the line between <strong>essential skills</strong> (critical thinking, judgment, design tradeoffs) and <strong>incidental skills</strong> (syntax, formatting) that AI can handle.</p>
+        <p>Group members raised oral defenses as assessment and discussed feasibility in large classes.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>👷 Invisible Labor & a New Worker Movement</summary>
+      <div class="detail-body">
+        <p>Data annotation workers in Kenya are paid under $4/hour to label toxic content that makes chatbots safe. Arvind estimated a <strong>lower bound of millions</strong> of such workers; companies are secretive about the true scale.</p>
+        <p>He sees the need for a new, international worker consciousness and movement, comparable to what followed the Industrial Revolution.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>📋 Additional Examples from the Discussion</summary>
+      <div class="detail-body">
+        <p><strong>Netherlands welfare-fraud algorithm (2013–2019):</strong> Wrongly accused ~30,000 parents, often using nationality. Some faced debts over €100,000, leading to the 2021 resignation of the prime minister and cabinet.</p>
+        <p><strong>Michigan unemployment algorithm (2013–2015):</strong> Wrongly collected $21 million.</p>
+        <p><strong>Australia's "robo-debt" scandal:</strong> 721 million AUD wrongly collected.</p>
+        <p><strong>Toronto beach predictions (2022):</strong> Vendor promised 90% accuracy, but on 64% of unsafe days, beaches remained open.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- KEY EXAMPLES -->
+  <div class="section" id="examples">
+    <div class="section-label">From the Book</div>
+    <h2>Key Examples</h2>
+
+    <div class="card">
+      <span class="tag tag-shortform">From the Shortform Summary</span>
+      <h3>How Predictive AI Goes Wrong</h3>
+
+      <div class="example">
+        <span class="domain-pill">Healthcare</span>
+        <strong>Optum's "Impact Pro"</strong> — Used healthcare <em>spending</em> as a proxy for <em>needs</em>. Because Black patients historically had less access, the system systematically deprioritized them.
+      </div>
+      <div class="example">
+        <span class="domain-pill">Healthcare</span>
+        <strong>The Asthma/Pneumonia Paradox</strong> — Algorithm deemed asthma patients lower risk because they had better outcomes in training data (due to aggressive treatment). Replacing the system would send them home with potentially fatal results.
+      </div>
+      <div class="example">
+        <span class="domain-pill">Healthcare</span>
+        <strong>Epic's Sepsis System</strong> — Hospitals adopted it despite unverified efficacy, incentivized by monetary rewards. Multiple analyses found outcomes weren't up to par.
+      </div>
+      <div class="example">
+        <span class="domain-pill">Criminal Justice</span>
+        <strong>COMPAS Recidivism Tool</strong> — Biased against Black defendants and no more accurate than simple rules based on age and prior convictions.
+      </div>
+      <div class="example">
+        <span class="domain-pill">Hiring</span>
+        <strong>Retorio Video Interviews</strong> — Changes in appearance, backdrop, or resume arrangement changed AI assessments. Candidates gamed it with invisible text and jargon.
+      </div>
+      <div class="example">
+        <span class="domain-pill">Policing</span>
+        <strong>ShotSpotter</strong> — Hasn't reduced gun violence despite claims. Led to wrongful arrests. Ignores systemic causes of violence.
+      </div>
+      <div class="example">
+        <span class="domain-pill">Research</span>
+        <strong>Fragile Families Challenge</strong> — With 10,000+ data points per child, complex AI performed no better than a simple model with a handful of basic variables.
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-shortform">From the Shortform Summary</span>
+      <h3>Content Moderation Failures</h3>
+      <p><strong>Facebook in Myanmar:</strong> One Burmese-speaking moderator for an entire country. Despite years of warnings, hate speech fueled violence that killed over 10,000 and drove 700,000+ from their homes.</p>
+      <p><strong>Absurd automated decisions:</strong> X suspended an anti-Nazi Captain America cartoon. YouTube removed Cornell's video library over one art lecture. YouTube flagged a chess video for "White is better."</p>
+      <p><strong>Medical photo misidentification:</strong> A father lost Google access after AI flagged his child's medical photos as exploitation.</p>
+    </div>
+
+    <div class="card">
+      <span class="tag tag-book">From the Book</span>
+      <h3>Where AI Is Actually Helpful</h3>
+      <p>The book is emphatic that it is <em>not</em> anti-AI. Technologies that work well: spell-check, autocomplete, spam filters, speech recognition, handwriting recognition, robot vacuums, and airplane autopilot. Once AI works reliably, we stop calling it "AI."</p>
+      <p>Generative AI is acknowledged as a genuinely powerful creative tool. Self-driving cars could eventually prevent roughly 1 million fatalities worldwide annually. AI in education can be a valuable learning tool — comparable to the calculator — with the right oversight.</p>
+    </div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="section" id="reviews">
+    <div class="section-label">Critical Reception</div>
+    <h2>What Critics Said</h2>
+
+    <div class="card">
+      <span class="tag tag-review">From Published Reviews</span>
+      <p style="font-size:0.88em;color:var(--gray-600);margin-bottom:18px;">Named to Nature's top 10 books of 2024, Bloomberg's 49 best of 2024, Forbes's 10 must-read tech books. Finalist, PROSE Award in Computing (AAP).</p>
+
+      <div class="review"><div class="pub">The New Yorker</div><div class="text">Praised the argument that the blanket term "AI" serves as a smoke screen for underperforming technologies, noting the book goes beyond describing AI to characterize the human condition.</div></div>
+      <div class="review"><div class="pub">Nature</div><div class="text">Called it a well-researched book and one of the best on this controversial subject.</div></div>
+      <div class="review"><div class="pub">Science News</div><div class="text">Described it as a powerful reminder of how AI has already infiltrated our lives and a convincing plea to take care in how we interact with it.</div></div>
+      <div class="review"><div class="pub">WIRED</div><div class="text">Noted the useful division of AI into predictive and generative categories, calling it worthwhile for anyone who encounters AI tools.</div></div>
+      <div class="review"><div class="pub">Kirkus (starred)</div><div class="text">Written in language even nontechnical readers can understand. Highly useful advice for nearly everyone.</div></div>
+      <div class="review"><div class="pub">Julia Angwin, <em>Dragnet Nation</em></div><div class="text">If you're only going to read one book on AI, make it this one.</div></div>
+      <div class="review"><div class="pub">Alondra Nelson, Institute for Advanced Study</div><div class="text">Revelatory. Exposes the "AI hype vortex" and bravely calls out how AI fails us daily with devastating consequences.</div></div>
+    </div>
+  </div>
+
+  <!-- SPONSOR -->
+  <div class="sponsor-card">
+    <h3>📘 Sponsored by Shortform</h3>
+    <p>Shortform provides expert-written, in-depth guides to nonfiction books. Their summary of AI Snake Oil is available above. Try Shortform free with $50 off: <a href="https://shortform.com/wondertools50" target="_blank">shortform.com/wondertools50</a></p>
+  </div>
+
+  <!-- WHAT'S NEXT -->
+  <div class="section" id="next">
+    <div class="section-label">Coming Up</div>
+    <h2>What's Next</h2>
+
+    <div class="card">
+      <h3>Upcoming in Season 1</h3>
+      <p style="margin-bottom:14px;">Our next two reads continue the AI conversation from different angles:</p>
+      <p><strong>📕 Mastering AI</strong> by Jeremy Kahn — Invitations going out soon.</p>
+      <p><strong>📗 More Than Words</strong> by John Maeda — Following Mastering AI.</p>
+      <p style="margin-top:18px;">See all 10 books at our <a href="https://jeremycaplan.github.io/wonder-tools-book-group/" target="_blank" style="color:var(--black);font-weight:700;">book group page →</a></p>
+    </div>
+
+    <div class="link-grid">
+      <a class="link-card" href="https://jeremycaplan.github.io/wonder-tools-book-group/" target="_blank">
+        <div class="icon">📚</div>
+        <div><div class="label">Book Group Page</div><div class="desc">Full reading list & schedule</div></div>
+      </a>
+      <a class="link-card" href="https://wondertools.substack.com" target="_blank">
+        <div class="icon">✉️</div>
+        <div><div class="label">Wonder Tools Newsletter</div><div class="desc">Tools, tips & more</div></div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <div class="brand">Wonder Tools Book Group</div>
+  <p>Hosted by <a href="https://wondertools.substack.com">Jeremy Caplan</a> · Sponsored by <a href="https://shortform.com/wondertools50">Shortform</a></p>
+  <p style="margin-top:8px;">Thank you for being a paid subscriber and supporting deeper conversations about technology.</p>
+</div>
+
+</body>
+</html>
